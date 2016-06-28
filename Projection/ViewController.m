@@ -26,9 +26,20 @@ static CGFloat btnAlpha = 0.5;
 
 @property (nonatomic,strong) UIButton * saveBtn;                        /**< 保存*/
 
+@property (nonatomic,assign) BOOL isFirstLoad;                          /**< 是否是第一次加载*/
+
 @end
 
 @implementation ViewController
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.isFirstLoad = YES;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -44,7 +55,7 @@ static CGFloat btnAlpha = 0.5;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    if (!self.imgV.image) {
+    if (self.isFirstLoad) {
         [self getImagePicker];
     }
 }
@@ -63,6 +74,7 @@ static CGFloat btnAlpha = 0.5;
         imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         imagePicker.delegate = self;
         [self presentViewController:imagePicker animated:YES completion:nil];
+        self.isFirstLoad = NO;
     }
 }
 

@@ -12,6 +12,8 @@
 
 @property (nonatomic,strong) RGBSliderView * editV;
 
+@property (nonatomic,strong) UIColor * resultC;                     /**< 最终颜色*/
+
 @end
 
 @implementation EditImageViewController
@@ -31,7 +33,7 @@
     [super viewDidLoad];
     
     [self.view addSubview:self.editV];
-    self.view.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.7];
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction:)];
     [self.view addGestureRecognizer:tap];
     // Do any additional setup after loading the view.
@@ -41,15 +43,16 @@
 - (void)tapAction:(UITapGestureRecognizer *)sender {
     CGPoint locationP = [sender locationInView:self.view];
     if (!CGRectContainsPoint(self.editV.frame, locationP)) {
+        if (self.editBlock) {
+            self.editBlock(self.resultC);
+        }
         [self dismissViewControllerAnimated:NO completion:nil];
     }
 }
 
 #pragma mark -- 代理(RGBPressDelegate)
 - (void)rgbDidChanged:(UIColor *)color {
-    if (self.editBlock) {
-        self.editBlock(color);
-    }
+    self.resultC = color;
 }
 
 #pragma mark -- GetterAndSetter
